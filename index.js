@@ -1,12 +1,32 @@
 'use strict';
-const CONST = require('./lib/const.js');
-const Request = require('./lib/request.js');
+
 const SecondBoard = require('./lib/secondBoard.js');
+const MainBoard = require('./lib/mainBoard.js');
 
-let sb = new SecondBoard();
+module.exports = {
+    market: {
+        coins,
+        ticker,
+    }
+}
 
-let test = async function () {
-    await sb.historyKline({ symbol: CONST.COIN_TYPE.CNY.ETC, period: '5min', size: 2 });
-};
+async function coins() {
+    const secondBoardCoins = await getSecondBoardCoins();
+    return getMainBoardCoins().concat(secondBoardCoins);
+}
 
-test();
+async function ticker(symbol) {
+    if (getMainBoardCoins().includes(symbol)) {
+        return await MainBoard.getCurrentPrice(symbol);
+    } else {
+        return await SecondBoard.getCurrentPrice(symbol);
+    }
+}
+
+async function getSecondBoardCoins() {
+    return (await SecondBoard.currencys()).data || [];
+}
+
+function getMainBoardCoins() {
+    return ['btc', 'ltc'];
+}
