@@ -7,6 +7,10 @@ module.exports = {
     market: {
         coins,
         ticker,
+    },
+    board: {
+        SecondBoard,
+        MainBoard
     }
 }
 
