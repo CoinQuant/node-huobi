@@ -2,6 +2,7 @@
 
 const SecondBoard = require('./lib/secondBoard.js');
 const MainBoard = require('./lib/mainBoard.js');
+const utils = require('./lib/utils.js');
 
 module.exports = {
     market: {
@@ -19,11 +20,12 @@ async function coins() {
     return getMainBoardCoins().concat(secondBoardCoins);
 }
 
-async function ticker(symbol) {
+async function ticker(symbol, suffix = 'cny') {
+    symbol = utils.removeSuffix(symbol, suffix);
     if (getMainBoardCoins().includes(symbol)) {
-        return await MainBoard.getCurrentPrice(symbol);
+        return await MainBoard.getCurrentPrice(symbol, suffix);
     } else {
-        return await SecondBoard.getCurrentPrice(symbol);
+        return await SecondBoard.getCurrentPrice(symbol, suffix);
     }
 }
 
